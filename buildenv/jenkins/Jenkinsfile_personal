@@ -52,7 +52,15 @@ pipeline {
 						CUSTOMIZED_SDK_URL_OPTION = (params.CUSTOMIZED_SDK_URL != "") ? "-c '$CUSTOMIZED_SDK_URL'" : ""
 						OPENJ9_REPO_OPTION = (params.OPENJ9_REPO) ? "--openj9_repo ${params.OPENJ9_REPO}" : "--openj9_repo https://github.com/eclipse/openj9.git"
 						OPENJ9_BRANCH_OPTION = (params.OPENJ9_BRANCH) ? "--openj9_branch ${params.OPENJ9_BRANCH}" : ""
-						sh "./openjdk-tests/get.sh -s `pwd` -t `pwd`/openjdk-tests -p ${getPlatformAndLabel(SPEC)[0]} -j ${JAVA_VERSION} -i ${JAVA_IMPL} -r ${params.SDK_RESOURCE} ${CUSTOMIZED_SDK_URL_OPTION} ${OPENJ9_REPO_OPTION} ${OPENJ9_BRANCH_OPTION}"
+						GET_SH_CMD = "./openjdk-tests/get.sh -s `pwd` -t `pwd`/openjdk-tests -p ${getPlatformAndLabel(SPEC)[0]} -j ${JAVA_VERSION} -i ${JAVA_IMPL} -r ${params.SDK_RESOURCE} ${CUSTOMIZED_SDK_URL_OPTION} ${OPENJ9_REPO_OPTION} ${OPENJ9_BRANCH_OPTION}"
+						if (params.CUSTOMIZED_SDK_URL_CREDENTIAL_ID) {
+							// USERNAME and PASSWORD reference with a withCredentials block will not be visible within job output
+							withCredentials([usernamePassword(credentialsId: "${params.CUSTOMIZED_SDK_URL_CREDENTIAL_ID}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+								sh "$GET_SH_CMD"
+							}
+						} else {
+							sh "$GET_SH_CMD"
+						}
 					}
                 }
             }
