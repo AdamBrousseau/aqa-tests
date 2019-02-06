@@ -132,8 +132,8 @@ getBinaryOpenjdk()
 
 	if [ "$CUSTOMIZED_SDK_URL" != "" ]; then
 		download_url=$CUSTOMIZED_SDK_URL
-                # if these are passed through via withCredentials(CUSTOMIZED_SDK_URL_CREDENTIAL_ID) these will not be visible within job output,
-                # if supplied when run manually with --username and --password these will be seen in plaintext within job output
+				# if these are passed through via withCredentials(CUSTOMIZED_SDK_URL_CREDENTIAL_ID) these will not be visible within job output,
+				# if supplied when run manually with --username and --password these will be seen in plaintext within job output
 		if [ "$USERNAME" != "" ] && [ "$PASSWORD" != "" ]; then
 			curl_options="--user $USERNAME:$PASSWORD"
 		fi
@@ -233,11 +233,11 @@ getTestKitGenAndFunctionalTestMaterial()
 
 	mv openj9/test/TestConfig TestConfig
 	mv openj9/test/Utils Utils
-    if [ -d functional ]; then
-        mv openj9/test/functional/* functional/
-    else
-	    mv openj9/test/functional functional
-    fi
+	if [ -d functional ]; then
+		mv openj9/test/functional/* functional/
+	else
+		mv openj9/test/functional functional
+	fi
 	rm -rf openj9
 
 	if [ "$VENDOR_REPOS" != "" ]; then
