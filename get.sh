@@ -88,6 +88,15 @@ parseCommandLineArgs()
 			"--customizedURL" | "-c" )
 				CUSTOMIZED_SDK_URL="$1"; shift;;
 
+			"--customSCP" )
+				CUSTOMIZED_SCP_PATH="$1"; shift;;
+
+			"--sdkFilename" )
+				SDK_FILENAME="$1"; shift;;
+
+			"--testFilename" )
+				TEST_FILENAME="$1"; shift;;
+
 			"--username" )
 				USERNAME="$1"; shift;;
 
@@ -137,6 +146,17 @@ getBinaryOpenjdk()
 		if [ "$USERNAME" != "" ] && [ "$PASSWORD" != "" ]; then
 			curl_options="--user $USERNAME:$PASSWORD"
 		fi
+	elif [ "$CUSTOMIZED_SCP_PATH" ~= "" ]; then
+		if [ "$SDK_FILENAME" == "" ]; then
+			echo "ERROR: Must pass SDK_FILENAME if using SCP option to get SDK"
+			exit 1
+		fi
+		if [ "$TEST_FILENAME" == "" ]; then
+			echo "WARNING: No TEST_FILENAME passed, we will not be fetching a Native Test Lib zipfile"
+		else
+			scp $CUSTOMIZED_SCP_PATH/$TEST_FILENAME .
+		fi
+		scp $CUSTOMIZED_SCP_PATH/$SDK_FILENAME .
 	elif [ "$SDK_RESOURCE" == "nightly" ] || [ "$SDK_RESOURCE" == "releases" ]; then
 		os=${PLATFORM#*_}
 		os=${os%_largeHeap}

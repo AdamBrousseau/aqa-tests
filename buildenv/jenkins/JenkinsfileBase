@@ -136,6 +136,10 @@ def setup() {
 			if (params.CUSTOMIZED_SDK_URL) {
 				SDK_RESOURCE = "customized"
 				CUSTOMIZED_SDK_URL_OPTION = "-c '${params.CUSTOMIZED_SDK_URL}'"
+			} else if (params.CUSTOM_SCP_PATH) {
+				CUSTOM_SCP_PATH = params.CUSTOM_SCP_PATH
+				SDK_FILENAME = params.SDK_FILENAME
+				TEST_FILENAME = params.TEST_FILENAME
 			} else {
 				CUSTOMIZED_SDK_URL_OPTION = ""
 			}
