@@ -20,8 +20,13 @@ stage('Queue') {
         PLATFORM = 's390x_zos'
         SDK_RESOURCE = 'upstream'
         SPEC='zos_390-64_cmprssptrs'
-        sh 'printenv'
-        //jenkinsfile.testBuild()
+
+        def gitConfig = scm.getUserRemoteConfigs()[0]
+        println gitConfig
+        def SCM_GIT_REPO = gitConfig.getUrl()
+        def SCM_GIT_BRANCH = scm.branches[0].name
+        sh "git clone -b ${SCM_GIT_BRANCH} ${SCM_GIT_REPO} openjdk-tests"
+        jenkinsfile.testBuild()
     }
 }
 jenkinsfile.run_parallel_tests()
