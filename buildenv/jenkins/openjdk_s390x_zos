@@ -20,7 +20,8 @@ stage('Queue') {
         PLATFORM = 's390x_zos'
         SDK_RESOURCE = 'upstream'
         SPEC='zos_390-64_cmprssptrs'
-        jenkinsfile.testBuild()
+        sh 'printenv'
+        //jenkinsfile.testBuild()
     }
 }
 jenkinsfile.run_parallel_tests()
