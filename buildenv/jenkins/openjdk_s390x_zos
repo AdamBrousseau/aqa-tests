@@ -9,7 +9,7 @@ stage('Queue') {
     node((params.LABEL) ? params.LABEL : LABEL) {
         PLATFORM = 's390x_zos'
         SDK_RESOURCE = 'upstream'
-        SPEC='zos_390-64_cmprssptrs'
+        SPEC = 'zos_390-64_cmprssptrs'
 
         def gitConfig = scm.getUserRemoteConfigs()[0]
         def SCM_GIT_REPO = gitConfig.getUrl()
