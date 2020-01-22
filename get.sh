@@ -210,8 +210,19 @@ getBinaryOpenjdk()
 					echo "curl error code: $download_exit_code. Sleep $sleep_time secs, then retry $count..."
 					sleep $sleep_time
 				fi
-				echo "curl -OLJSks ${curl_options} $file"
-				curl -OLJSks ${curl_options} $file
+				case "$VERBOSE_CURL" in
+					VERBOSE)
+						curl_verbosity="v"
+						;;
+					NORMAL)
+						curl_verbosity=''
+						;;
+					*)
+						curl_verbosity="s"
+						;;
+				esac
+				echo "curl -OLJSk${curl_verbosity} ${curl_options} $file"
+				curl -OLJSk${curl_verbosity} ${curl_options} $file
 				download_exit_code=$?
 				count=$(( $count + 1 ))
 			done
