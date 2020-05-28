@@ -776,11 +776,7 @@ def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
 			parallel parallel_tests
-		}
-
-		stage ("Aggregate Results") {
-			echo "I feel like I can grab the result here?"
-
+			echo "let me grab something from ${create_jobs}"
 		}
 	}
 }
