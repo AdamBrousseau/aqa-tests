@@ -778,7 +778,7 @@ def run_parallel_tests() {
 			parallel parallel_tests
 			echo "let me grab something from ${create_jobs}"
 			for(String name in create_jobs.keySet()){
-				echo "try copy result from ${name}"
+				echo "try copy result from ${JOB_NAME}_${name}"
 				try {
 					step([$class: 'CopyArtifact',
 						fingerprintArtifacts: true,
@@ -788,7 +788,7 @@ def run_parallel_tests() {
 					// copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful, target: '**/TKG/test_output_*'
 					echo "SUCCESS!"
 				} catch (Exception e) {
-					echo "Cannot run copyArtifacts from ${name} . Skipping copyArtifacts..."
+					echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
 				}
 			}
 		}
