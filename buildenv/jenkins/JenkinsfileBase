@@ -780,7 +780,7 @@ def run_parallel_tests() {
 			for(String name in create_jobs.keySet()){
 				echo "try copy result from ${name}"
 				try {
-					copyArtifacts projectName: ${name}, selector: lastSuccessful, target: '**/TKG/test_output_*'
+					copyArtifacts projectName: ""${JOB_NAME}_${name}", selector: lastSuccessful, target: '**/TKG/test_output_*'
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "Cannot run copyArtifacts from ${name} . Skipping copyArtifacts..."
