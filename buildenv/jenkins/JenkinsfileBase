@@ -576,6 +576,8 @@ def post(output_name) {
 				failIfNoResultsValue = false
 			}
 			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: false, failIfNoResults: failIfNoResultsValue])
+			echo "archieve results"
+			archiveArtifacts artifacts: "**/*.tap", fingerprint: true, allowEmptyArchive: true
 
 			junit allowEmptyResults: true, keepLongStdio: true, testResults: '**/work/**/*.jtr.xml, **/junitreports/**/*.xml, **/external_test_reports/**/*.xml'
 			archiveSHAFile()
@@ -784,14 +786,14 @@ def run_parallel_tests() {
 					// 	filter: '**/TestTargetResult.tap',
 					// 	projectName: "${JOB_NAME}_${name}",
 					// 	selector: [lastSuccessful: stable]])
-					copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful(stable: true), filter: "*.tap"
+					copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful(stable: true), filter: "**/archive", target:"output"
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
 					echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
 				}
 			}
-			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: true, failIfNoResults: false])
+			// step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: true, failIfNoResults: false])
 		}
 	}
 }
