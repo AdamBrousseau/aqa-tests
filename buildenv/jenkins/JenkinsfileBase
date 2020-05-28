@@ -108,6 +108,21 @@ def setupEnv() {
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
 		timestamps{
+			try{
+				copyArtifacts fingerprintArtifacts: true, projectName: params.UPSTREAM_TEST_JOB_NAME, selector: specific(params.UPSTREAM_TEST_JOB_NUMBER), target: './openjdk-tests/TKG/'
+				echo "copyartifacts from  ${params.UPSTREAM_TEST_JOB_NAME} ${params.UPSTREAM_TEST_JOB_NUMBER}"
+			}catch (Exception e) {
+				echo "exception is ${e}"
+			}
+
+			echo "test!!!"
+			try {
+					copyArtifacts projectName: "Grinder_testList_0", selector: specific("24"), filter: "TestTargetResult.tap", target:"output"
+					echo "SUCCESS!"
+				} catch (Exception e) {
+					echo "exception is ${e}"
+					echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
+				}
 			def testSubDirs = []
 			int childJobNum = 1
 			def UPSTREAM_TEST_JOB_NAME = ""
@@ -776,10 +791,18 @@ def addGrinderLink() {
 def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
-			parallel parallel_tests
-			echo "let me grab something from ${create_jobs}"
-			for(String name in create_jobs.keySet()){
-				echo "try copy result from ${JOB_NAME}_${name}"
+			flow = parallel parallel_tests
+			echo "let me grab something from ${flow}"
+			flow.each {
+				cjob ->
+				def jobInvocation = cjob.value.getRawBuild()
+				def key = cjob.key
+				def value = jobInvocation.getAbsoluteUrl()
+				println key + ' Build URL: ' + value
+				TEST_BUILD_URL[key] = value
+				TEST_BUILD_NUMBER[key] = jobInvocation.getNumber()
+				println 'Child Number is: ' + TEST_BUILD_NUMBER[key]
+			}
 				try {
 					// step([$class: 'CopyArtifact',
 					// 	fingerprintArtifacts: true,
