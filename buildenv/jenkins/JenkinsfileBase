@@ -777,6 +777,15 @@ def run_parallel_tests() {
 		stage ("Parallel Tests") {
 			parallel parallel_tests
 			echo "let me grab something from ${create_jobs}"
+			for(String name in create_jobs.keySet()){
+				echo "try copy result from ${name}"
+				try {
+					copyArtifacts projectName: ${name}, selector: lastSuccessful, target: '**/TKG/test_output_*'
+					echo "SUCCESS!"
+				} catch (Exception e) {
+					echo "Cannot run copyArtifacts from ${name} . Skipping copyArtifacts..."
+				}
+			}
 		}
 	}
 }
