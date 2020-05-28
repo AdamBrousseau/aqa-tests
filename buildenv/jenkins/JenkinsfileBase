@@ -777,6 +777,11 @@ def run_parallel_tests() {
 		stage ("Parallel Tests") {
 			parallel parallel_tests
 		}
+
+		stage ("Aggregate Results") {
+			echo "I feel like I can grab the result here?"
+
+		}
 	}
 }
 
