@@ -93,7 +93,7 @@ println "GROUPS: ${GROUPS}"
 println "ARCH_OS_LIST: ${ARCH_OS_LIST}"
 
 ARCH_OS_LIST.each { ARCH_OS ->
- 	def ADOPTOPENJDK_REPO = "https://github.com/AdoptOpenJDK/openjdk-tests.git"
+ 	def ADOPTOPENJDK_REPO = "https://github.com/OscarQQ/openjdk-tests.git"
 	def OPENJ9_REPO = "https://github.com/eclipse/openj9.git"
 	def TKG_REPO = "https://github.com/AdoptOpenJDK/TKG.git"
 

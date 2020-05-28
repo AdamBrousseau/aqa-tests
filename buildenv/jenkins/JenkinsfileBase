@@ -442,6 +442,7 @@ def buildTest() {
 			if (params.UPSTREAM_TEST_JOB_NAME && params.UPSTREAM_TEST_JOB_NUMBER) {
 				try {
 					copyArtifacts fingerprintArtifacts: true, projectName: params.UPSTREAM_TEST_JOB_NAME, selector: specific(params.UPSTREAM_TEST_JOB_NUMBER), target: './openjdk-tests/TKG/'
+					echo "copyartifacts from  ${params.UPSTREAM_TEST_JOB_NAME} ${params.UPSTREAM_TEST_JOB_NUMBER}"
 				} catch (Exception e) {
 					echo "Cannot run copyArtifacts from ${params.UPSTREAM_TEST_JOB_NAME} ${params.UPSTREAM_TEST_JOB_NUMBER}. Skipping copyArtifacts..."
 				}
@@ -575,6 +576,7 @@ def post(output_name) {
 				failIfNoResultsValue = false
 			}
 			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: false, failIfNoResults: failIfNoResultsValue])
+			echo "reach here, shall I publish here"
 
 			junit allowEmptyResults: true, keepLongStdio: true, testResults: '**/work/**/*.jtr.xml, **/junitreports/**/*.xml, **/external_test_reports/**/*.xml'
 			archiveSHAFile()
