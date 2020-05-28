@@ -818,7 +818,6 @@ def run_parallel_tests() {
 			}
 			// step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: true, failIfNoResults: false])
 		}
-	}
 }
 
 return this
