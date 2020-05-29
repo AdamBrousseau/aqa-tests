@@ -290,7 +290,6 @@ def setup() {
 				try {
 					def name = 'Grinder_testList_1'
 					def buildId = 36
-					copyArtifacts (projectName: 'Grinder_testList_1', selector: specific("36"), filter: "**/TestTargetResult.tap", target:'Grinder_testList_1')
 					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
 					echo "SUCCESS!"
 				} catch (Exception e) {
@@ -794,10 +793,9 @@ def run_parallel_tests() {
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
 				def name = cjob.value.getProjectName()
-				def vvv = cjob.value
-				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
+				echo "jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
-					copyArtifacts (projectName: '${name}', selector: specific('${buildId}'), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
