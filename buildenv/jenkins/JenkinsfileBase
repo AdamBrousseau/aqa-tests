@@ -782,14 +782,12 @@ def run_parallel_tests() {
 			flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
-				// def name = jobInvocation.getUpstreamBuilds().get(0).getProjectName()
 				def buildId = jobInvocation.getNumber()
-				def envVars = jobInvocation.getEnvVars()
-				echo "try this one: envVars is ${envVars}"
+				def name = cjob.key
 				def vvv = cjob.value
-				echo "output value ${vvv}"
+				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
-					copyArtifacts projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"/${name}/${buildId}"
+					copyArtifacts projectName: "${JOB_NAME}_${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"/${JOB_NAME}_${name}/${buildId}"
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
