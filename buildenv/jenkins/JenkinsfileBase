@@ -785,7 +785,8 @@ def run_parallel_tests() {
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
 				// def name = jobInvocation.getProjectName() 
-				def name = jobInvocation.getFullProjectName() 
+				// def name = jobInvocation.getFullProjectName() 
+				def name = cjob.value.getProjectName()
 				def vvv = cjob.value
 				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
