@@ -108,7 +108,9 @@ def setupEnv() {
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
 		try {
-				copyArtifacts projectName: "Grinder_testList_0", selector: specific("24"), filter: "**/TestTargetResult.tap", target:"Grinder_testList_0/24"
+				def nameee = "Grinder_testList_0"
+				def buildIddd = "24"
+				copyArtifacts projectName: ${nameee}, selector: specific(${buildIddd}), filter: "**/TestTargetResult.tap", target:"${nameee}/${buildIddd}"
 				echo "SUCCESS!"
 			} catch (Exception e) {
 				echo "exception is ${e}"
