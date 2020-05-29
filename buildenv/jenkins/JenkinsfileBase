@@ -107,18 +107,7 @@ def setupEnv() {
 
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
-		// try {
-		// 		def nameee = "Grinder_testList_0"
-		// 		def buildIddd = "24"
-		// 		copyArtifacts projectName: "Grinder_testList_0", selector: specific("24"), filter: "**/TestTargetResult.tap", target:"Grinder_testList_0/24"
-		// 		copyArtifacts (projectName: ${nameee}, selector: specific(${buildIddd}), filter: "**/TestTargetResult.tap", target:"${nameee}/${buildIddd}")
-		// 		echo "SUCCESS!"
-		// 	} catch (Exception e) {
-		// 		echo "exception is ${e}"
-		// 		echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
-		// 	}
 		timestamps{
-			echo "test!!!"
 			def testSubDirs = []
 			int childJobNum = 1
 			def UPSTREAM_TEST_JOB_NAME = ""
@@ -798,7 +787,7 @@ def run_parallel_tests() {
 				def vvv = cjob.value
 				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
-					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+					copyArtifacts (projectName: '${name}', selector: specific('${buildId}'), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
