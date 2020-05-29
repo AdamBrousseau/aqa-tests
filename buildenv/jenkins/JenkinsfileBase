@@ -794,13 +794,11 @@ def run_parallel_tests() {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
-				// def name = jobInvocation.getProjectName() 
-				// def name = jobInvocation.getFullProjectName() 
 				def name = cjob.value.getProjectName()
 				def vvv = cjob.value
 				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
-					copyArtifacts (projectName: "${name}", selector: specific(${buildId}), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
