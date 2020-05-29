@@ -287,6 +287,13 @@ def createJob( TEST_JOB_NAME, ARCH_OS ) {
 
 def setup() {
 	stage('Setup') {
+		try {
+					copyArtifacts projectName: "Grinder_testList_1", selector: specific("29"), filter: "**/TestTargetResult.tap", target:"/Grinder_testList_1/29"
+					echo "SUCCESS!"
+			} catch (Exception e) {
+					echo "exception is ${e}"
+					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
+		}
 		timestamps{
 			setupEnv()
 
