@@ -783,7 +783,8 @@ def run_parallel_tests() {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
-				def name = jobInvocation.getProjectName() 
+				// def name = jobInvocation.getProjectName() 
+				def name = jobInvocation.getFullProjectName() 
 				def vvv = cjob.value
 				echo "output value is ${vvv}, jobinvocation is ${jobInvocation}, buildnum is ${buildId}, name is ${name}"
 				try {
@@ -795,20 +796,8 @@ def run_parallel_tests() {
 				}
 
 			}
-				// try {
-				// 	// step([$class: 'CopyArtifact',
-				// 	// 	fingerprintArtifacts: true,
-				// 	// 	filter: '**/TestTargetResult.tap',
-				// 	// 	projectName: "${JOB_NAME}_${name}",
-				// 	// 	selector: [lastSuccessful: stable]])
-				// 	copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful(stable: true), filter: "**/archive", target:"output"
-				// 	echo "SUCCESS!"
-				// } catch (Exception e) {
-				// 	echo "exception is ${e}"
-				// 	echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
-				// }
-			}
 		}
+	}
 }
 
 return this
