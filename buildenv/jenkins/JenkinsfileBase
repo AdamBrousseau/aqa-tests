@@ -107,13 +107,6 @@ def setupEnv() {
 
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
-		try {
-				copyArtifacts projectName: "Grinder_testList_0", selector: specific("24"), filter: "**/TestTargetResult.tap", target:"output"
-				echo "SUCCESS!"
-			} catch (Exception e) {
-				echo "exception is ${e}"
-				echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
-			}
 		timestamps{
 			echo "test!!!"
 			def testSubDirs = []
@@ -789,27 +782,30 @@ def run_parallel_tests() {
 			flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
-				def key = cjob.key
-				def value = jobInvocation.getAbsoluteUrl()
-				println key + ' Build URL: ' + value
-				TEST_BUILD_URL[key] = value
-				TEST_BUILD_NUMBER[key] = jobInvocation.getNumber()
-				println 'Child Number is: ' + TEST_BUILD_NUMBER[key]
-			}
+				def name = jobInvocation.getUpstreamBuilds().get(0).getProjectName()
+				def buildId = jobInvocation.getNumber()
 				try {
-					// step([$class: 'CopyArtifact',
-					// 	fingerprintArtifacts: true,
-					// 	filter: '**/TestTargetResult.tap',
-					// 	projectName: "${JOB_NAME}_${name}",
-					// 	selector: [lastSuccessful: stable]])
-					copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful(stable: true), filter: "**/archive", target:"output"
+					copyArtifacts projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"/${name}/${buildId}"
 					echo "SUCCESS!"
 				} catch (Exception e) {
 					echo "exception is ${e}"
-					echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
+					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
 				}
+
 			}
-			// step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: true, failIfNoResults: false])
+				// try {
+				// 	// step([$class: 'CopyArtifact',
+				// 	// 	fingerprintArtifacts: true,
+				// 	// 	filter: '**/TestTargetResult.tap',
+				// 	// 	projectName: "${JOB_NAME}_${name}",
+				// 	// 	selector: [lastSuccessful: stable]])
+				// 	copyArtifacts projectName: "${JOB_NAME}_${name}", selector: lastSuccessful(stable: true), filter: "**/archive", target:"output"
+				// 	echo "SUCCESS!"
+				// } catch (Exception e) {
+				// 	echo "exception is ${e}"
+				// 	echo "Cannot run copyArtifacts from ${JOB_NAME}_${name} . Skipping copyArtifacts..."
+				// }
+			}
 		}
 }
 
