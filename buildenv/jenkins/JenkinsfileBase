@@ -778,8 +778,9 @@ def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
 			flow = parallel parallel_tests
-			echo "let me grab something from ${flow}"
-			flow.each {
+			try{
+				echo "let me grab something from ${flow}"
+				flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
@@ -794,7 +795,9 @@ def run_parallel_tests() {
 					echo "exception is ${e}"
 					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
 				}
-
+			}
+			}catch (Exception e){
+				echo "exception is ${e}"
 			}
 		}
 	}
