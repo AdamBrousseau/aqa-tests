@@ -782,7 +782,7 @@ def run_parallel_tests() {
 			flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
-				def name = jobInvocation.getUpstreamBuilds().get(0).getProjectName()
+				// def name = jobInvocation.getUpstreamBuilds().get(0).getProjectName()
 				def buildId = jobInvocation.getNumber()
 				def envVars = jobInvocation.getEnvVars()
 				echo "try this one: envVars is ${envVars}"
