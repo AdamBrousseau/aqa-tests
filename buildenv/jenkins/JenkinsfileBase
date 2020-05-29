@@ -786,6 +786,8 @@ def run_parallel_tests() {
 				def buildId = jobInvocation.getNumber()
 				def envVars = jobInvocation.getEnvVars()
 				echo "try this one: envVars is ${envVars}"
+				def vvv = cjob.value
+				echo "output value ${vvv}"
 				try {
 					copyArtifacts projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"/${name}/${buildId}"
 					echo "SUCCESS!"
