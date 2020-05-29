@@ -107,6 +107,13 @@ def setupEnv() {
 
 def setupParallelEnv() {
 	stage('setupParallelEnv') {
+		try {
+				copyArtifacts projectName: "Grinder_testList_0", selector: specific("24"), filter: "**/TestTargetResult.tap", target:"Grinder_testList_0/24"
+				echo "SUCCESS!"
+			} catch (Exception e) {
+				echo "exception is ${e}"
+				echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
+			}
 		timestamps{
 			echo "test!!!"
 			def testSubDirs = []
