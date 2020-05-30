@@ -786,25 +786,21 @@ def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
 			flow = parallel parallel_tests
-			try{
-				echo "let me grab something from ${flow}"
-				flow.each {
+			echo "let me grab something from ${flow}"
+			flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
 				def name = cjob.value.getProjectName()
 				echo "jobinvocation is ${jobInvocation}, buildId is ${buildId}, name is ${name}"
 				echo "buildId type: ${buildId.class.name}, name type: ${name.class.name}"
-				try {
-					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
-					echo "SUCCESS!"
-				} catch (Exception e) {
-					echo "exception is ${e}"
-					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
-				}
-			}
-			}catch (Exception e){
-				echo "exception is ${e}"
+				// try {
+				copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+				echo "SUCCESS!"
+				// } catch (Exception e) {
+				// 	echo "exception is ${e}"
+				// 	echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
+				// }
 			}
 		}
 	}
