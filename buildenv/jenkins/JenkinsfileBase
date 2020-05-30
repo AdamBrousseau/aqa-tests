@@ -785,9 +785,9 @@ def addGrinderLink() {
 def run_parallel_tests() {
 	if (params.PARALLEL && params.PARALLEL != "None") {
 		stage ("Parallel Tests") {
-			flow = parallel parallel_tests
-			echo "let me grab something from ${flow}"
 			node{
+				flow = parallel parallel_tests
+				echo "let me grab something from ${flow}"
 				flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
@@ -804,8 +804,7 @@ def run_parallel_tests() {
 				// }
 			}
 			step([$class: "TapPublisher", testResults: "**/TestTargetResult.tap", outputTapToConsole: false, failIfNoResults: failIfNoResultsValue])
-			}
-			
+			}	
 		}
 	}
 }
