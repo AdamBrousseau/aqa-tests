@@ -795,7 +795,9 @@ def run_parallel_tests() {
 				echo "jobinvocation is ${jobInvocation}, buildId is ${buildId}, name is ${name}"
 				echo "buildId type: ${buildId.class.name}, name type: ${name.class.name}"
 				// try {
-				copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+				node {
+					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
+				}
 				echo "SUCCESS!"
 				// } catch (Exception e) {
 				// 	echo "exception is ${e}"
