@@ -287,15 +287,6 @@ def createJob( TEST_JOB_NAME, ARCH_OS ) {
 def setup() {
 	stage('Setup') {
 		timestamps{
-				try {
-					def name = 'Grinder_testList_1'
-					def buildId = 36
-					copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
-					echo "SUCCESS!"
-				} catch (Exception e) {
-					echo "exception is ${e}"
-					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
-				}
 			setupEnv()
 
 			if (fileExists('openjdkbinary')) {
@@ -585,7 +576,7 @@ def post(output_name) {
 				failIfNoResultsValue = false
 			}
 			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: false, failIfNoResults: failIfNoResultsValue])
-			echo "archieve results"
+			
 			archiveArtifacts artifacts: "**/*.tap", fingerprint: true, allowEmptyArchive: true
 
 			junit allowEmptyResults: true, keepLongStdio: true, testResults: '**/work/**/*.jtr.xml, **/junitreports/**/*.xml, **/external_test_reports/**/*.xml'
@@ -787,21 +778,16 @@ def run_parallel_tests() {
 		stage ("Parallel Tests") {
 			node{
 				flow = parallel parallel_tests
-				echo "let me grab something from ${flow}"
 				flow.each {
 				cjob ->
 				def jobInvocation = cjob.value.getRawBuild()
 				def buildId = jobInvocation.getNumber()
 				def name = cjob.value.getProjectName()
-				echo "jobinvocation is ${jobInvocation}, buildId is ${buildId}, name is ${name}"
-				echo "buildId type: ${buildId.class.name}, name type: ${name.class.name}"
-				// try {
-				copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:'${name}/${buildId}')
-				echo "SUCCESS!"
-				// } catch (Exception e) {
-				// 	echo "exception is ${e}"
-				// 	echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
-				// }
+				try {
+				copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/TestTargetResult.tap", target:"${name}/${buildId}")
+				} catch (Exception e) {
+					echo "Cannot run copyArtifacts from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
+				}
 			}
 			step([$class: "TapPublisher", testResults: "**/TestTargetResult.tap", outputTapToConsole: false, failIfNoResults: false])
 			}	
